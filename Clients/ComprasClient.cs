@@ -3,13 +3,14 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Threading.Tasks;
 using MSInventario.Models;
+using MSCompras.Models;
 
 namespace GatewayTienda.Clients
 {
     public class ComprasClient
     {
-        HttpClient client;
-        private string urlServicio = "";
+        private readonly HttpClient client;
+        private readonly string urlServicio = "";
 
         public ComprasClient()
         {
@@ -17,9 +18,52 @@ namespace GatewayTienda.Clients
             client = new HttpClient();
         }
 
-        // public async Task<Compra[]> BuscaCompra(DateTime inicio, DateTime fin)
-        // {
-            
-        // }
+        public async Task<Compra[]> BuscaCompra(int idCompra = -1)
+        {
+            Compra[] values = null;
+            string url = urlServicio + "/compras/buscar?";
+
+            if (idCompra >= 0)
+            {
+                url += "CompraId=" + idCompra;
+            }
+
+            try
+            {
+                string responseBody = await client.GetStringAsync(url);
+                values = JsonConvert.DeserializeObject<Compra[]>(responseBody);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nError al obtener una respuesta.");
+                Console.WriteLine("Error: {0}", ex.Message);
+            }
+
+            return values;
+        }
+
+        public async Task<Compra[]> ObtenerDetallesCompra(int idCompra)
+        {
+            Compra[] values = null;
+            string url = urlServicio + "/compras/detalles/";
+
+            if (idCompra >= 0)
+            {
+                url += idCompra;
+            }
+
+            try
+            {
+                string responseBody = await client.GetStringAsync(url);
+                values = JsonConvert.DeserializeObject<Compra[]>(responseBody);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nError al obtener una respuesta.");
+                Console.WriteLine("Error: {0}", ex.Message);
+            }
+
+            return values;
+        }
     }
 }

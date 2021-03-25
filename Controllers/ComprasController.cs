@@ -6,6 +6,7 @@ using GatewayTienda.Clients;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MSClientes.Models;
+using MSCompras.Models;
 using MSInventario.Models;
 
 namespace GatewayTienda
@@ -17,12 +18,14 @@ namespace GatewayTienda
         private readonly ILogger<ComprasController> _logger;
         private InventarioClient inventarioClient;
         private ClientesClient clientesClient;
+        private readonly ComprasClient comprasClient;
 
         public ComprasController(ILogger<ComprasController> logger)
         {
             _logger = logger;
             inventarioClient = new InventarioClient();
             clientesClient = new ClientesClient();
+            comprasClient = new ComprasClient();
         }
 
         [HttpGet("clientes")]
@@ -43,6 +46,34 @@ namespace GatewayTienda
             {
                 return Ok(value);
             } else return BadRequest();
+        }
+
+        [HttpGet("buscarCompra")]
+        public async Task<ActionResult<Compra>> ObtenerCompra([FromQuery]int idCompra = -1)
+        {
+            ActionResult resultado = BadRequest();
+            Compra[] compras = await comprasClient.BuscaCompra(idCompra);
+
+            if (compras != null)
+            {
+                resultado = Ok(compras);
+            }
+
+            return resultado;
+        }
+
+        [HttpGet("detallesCompra/{idCompra}")]
+        public async Task<ActionResult<Compra>> ObtenerDetallesCompra(int idCompra)
+        {
+            ActionResult resultado = BadRequest();
+            Compra[] compras = await comprasClient.ObtenerDetallesCompra(idCompra);
+
+            if (compras != null)
+            {
+                resultado = Ok(compras);
+            }
+
+            return resultado;
         }
     }
 }
