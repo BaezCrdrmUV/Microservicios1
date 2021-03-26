@@ -66,11 +66,11 @@ namespace GatewayTienda
         public async Task<ActionResult<Compra>> ObtenerDetallesCompra(int idCompra)
         {
             ActionResult resultado = BadRequest();
-            Compra[] compras = await comprasClient.ObtenerDetallesCompra(idCompra);
+            Compra compra = await comprasClient.ObtenerDetallesCompra(idCompra);
 
-            if (compras != null)
+            if (compra != null)
             {
-                resultado = Ok(compras);
+                resultado = Ok(compra);
             }
 
             return resultado;

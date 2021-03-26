@@ -42,9 +42,9 @@ namespace GatewayTienda.Clients
             return values;
         }
 
-        public async Task<Compra[]> ObtenerDetallesCompra(int idCompra)
+        public async Task<Compra> ObtenerDetallesCompra(int idCompra)
         {
-            Compra[] values = null;
+            Compra compra = null;
             string url = urlServicio + "/compras/detalles/";
 
             if (idCompra >= 0)
@@ -55,7 +55,7 @@ namespace GatewayTienda.Clients
             try
             {
                 string responseBody = await client.GetStringAsync(url);
-                values = JsonConvert.DeserializeObject<Compra[]>(responseBody);
+                compra = JsonConvert.DeserializeObject<Compra>(responseBody);
             }
             catch (Exception ex)
             {
@@ -63,7 +63,7 @@ namespace GatewayTienda.Clients
                 Console.WriteLine("Error: {0}", ex.Message);
             }
 
-            return values;
+            return compra;
         }
     }
 }
