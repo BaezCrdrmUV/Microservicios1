@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GatewayTienda.Clients;
+using GatewayTienda.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MSClientes.Models;
@@ -63,17 +64,23 @@ namespace GatewayTienda
         }
 
         [HttpGet("detallesCompra/{idCompra}")]
-        public async Task<ActionResult<Compra>> ObtenerDetallesCompra(int idCompra)
+        public async Task<ActionResult<CompraCliente>> ObtenerDetallesCompra(int idCompra)
         {
             ActionResult resultado = BadRequest();
             Compra compra = await comprasClient.ObtenerDetallesCompra(idCompra);
-
-            if (compra != null)
+            if(compra != null)
             {
-                resultado = Ok(compra);
-            }
+                Cliente[] clientes = await clientesClient.BuscaClientes("", compra.IdCliente);
+                
+                if(clientes != null && clientes.Count() > 0)
+                {
+                    Cliente cliente = clientes[0];
+                    CompraCliente comprasCliente = new CompraCliente(compra, cliente);
+                    resultado = Ok(comprasCliente);
 
-            return resultado;
+                    return resultado;
+                } else return BadRequest("Usuario no encontrado");
+            } else return BadRequest("Id no válido");
         }
     }
 }
