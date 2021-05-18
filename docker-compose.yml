@@ -52,38 +52,41 @@ services:
 
     # Microservicios
     ms_inventario:
-        image: ms_inventario_uv
+        image: ms_inventario_uv # Imagen local
         depends_on: 
             - "mysql_inventario"
         ports:
             - "8090:80"
-        build: 
-            context: ../MSInventario/
-            dockerfile: Dockerfile
+        # build: # Imagen local
+        #     context: ../MSInventario/
+        #     dockerfile: Dockerfile
+        build: https://github.com/BaezCrdrmUV/Microservicios1.git#MSInventario # Directo de repositorio
         environment: 
             DB_CONNECTION_STRING: "server=mysql_inventario;user=admin;password=admin;database=inventario"
 
     ms_compras:
-        image: ms_compras_uv
+        image: ms_compras_uv # Imagen local
         depends_on: 
             - "mysql_compras"
         ports:
             - "8091:80"
-        build: 
-            context: ../MSCompras/
-            dockerfile: Dockerfile
+        # build: # Imagen local
+        #     context: ../MSCompras/
+        #     dockerfile: Dockerfile
+        build: https://github.com/BaezCrdrmUV/Microservicios1.git#MSCompras # Directo de repositorio
         environment: 
             DB_CONNECTION_STRING: "server=mysql_compras;user=admin;password=admin;database=compras"
 
     ms_clientes:
-        image: ms_clientes_uv
+        image: ms_clientes_uv # Imagen local
         depends_on: 
             - "mysql_clientes"
         ports:
             - "8092:80"
-        build: 
-            context: ../MSClientes/
-            dockerfile: Dockerfile
+        # build: # Imagen local
+        #     context: ../MSClientes/
+        #     dockerfile: Dockerfile
+        build: https://github.com/BaezCrdrmUV/Microservicios1.git#MSClientes # Directo de repositorio
         environment: 
             DB_CONNECTION_STRING: "server=mysql_clientes;user=admin;password=admin;database=clientes"
 
